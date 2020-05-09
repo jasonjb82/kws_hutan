@@ -76,3 +76,6 @@ kh_2019_summ <- kh_2019 %>%
   left_join(islands,by=c("KODEPROV"="prov_code")) %>%
   distinct() %>%
   mutate(YEAR = year(TGLSKPNJK))
+
+# export to xlsx
+write_excel_csv(kh_2019_summ,paste0(wdir,"klhk\\kh_2019\\data_summary.csv"))
