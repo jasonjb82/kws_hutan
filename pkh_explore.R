@@ -14,7 +14,7 @@ if (length(file_name)==0){
 
 file_content <- fromJSON(txt=file_name)$personal
 dropbox_dir <- file_content$path
-wdir <- paste0(dropbox_dir,"\\leakage\\Data\\klhk\\pkh\\")
+wdir <- paste0(dropbox_dir,"\\KH\\Data\\Indonesia\\klhk\\PKH\\")
 
 # credentials -------------------------------------------------------------
 aws.signature::use_credentials()
