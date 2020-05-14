@@ -86,8 +86,8 @@ I = [32,33]
 years = np.delete(years, I).tolist()
 
 # Generate yearly KH layers using back propagation
-start_year = 1984
-end_year = 1985
+start_year = 1990
+end_year = 1991
 
 for d in range(start_year,end_year):
     print("Process starting...")
@@ -113,7 +113,9 @@ for d in range(start_year,end_year):
     arcpy.DeleteField_management (pkh,result)
     arcpy.MakeFeatureLayer_management("kh_reclass_2018.shp", "kh_rc_lyr")
     print("Combining Kawasan Hutan and Forest Releases...")
-    kh_union = arcpy.Union_analysis(['kh_rc_lyr',pkh],'kh_'+ str(d) + '.shp', "ALL", "", "")
+    kh_union = arcpy.Union_analysis(['kh_rc_lyr',pkh],'kh_'+ str(d) + '_union.shp', "ALL", "", "")
+    print("Deleting temporary PKH file...")
+    arcpy.Delete_management(pkh) 
     print("Cleaning up...")
     fieldname = "KH"
     expression = "reclass(!KH_1!,!KH!)"
@@ -123,10 +125,22 @@ for d in range(start_year,end_year):
         else:
            return KH"""
     arcpy.CalculateField_management(kh_union,fieldname, expression, "PYTHON_9.3",codeblock)
+    fieldname = "KODEPROV"
+    expression = "reclass(!KODEPROV_1!,!KODEPROV!)"
+    codeblock = """def reclass(KODEPROV,KODEPROV_1):
+        if (KODEPROV == 0):
+           return KODEPROV_1
+        else:
+           return KODEPROV"""
+    arcpy.CalculateField_management(kh_union,fieldname, expression, "PYTHON_9.3",codeblock)
     fields = [f.name for f in arcpy.ListFields(kh_union)]
     keep_fields = ['OBJECTID','FID','Shape','KODEPROV','KH']
     result = list((Counter(fields)-Counter(keep_fields)).elements())
-    arcpy.DeleteField_management (kh_union,result)
+    arcpy.DeleteField_management(kh_union,result)
+    print("Dissolving dataset...")
+    arcpy.Dissolve_management(kh_union, 'kh_'+ str(d) + '.shp',["KODEPROV","KH"], "", "","")
+    print("Deleting union file...")
+    arcpy.Delete_management(kh_union) 
     print("Process complete...")
 
 
