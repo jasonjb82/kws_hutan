@@ -86,8 +86,8 @@ I = [32,33]
 years = np.delete(years, I).tolist()
 
 # Generate yearly KH layers using back propagation
-start_year = 1990
-end_year = 1991
+start_year = 2008
+end_year = 2009
 
 for d in range(start_year,end_year):
     print("Process starting...")
