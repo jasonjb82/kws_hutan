@@ -86,8 +86,8 @@ I = [32,33]
 years = np.delete(years, I).tolist()
 
 # Generate yearly KH layers using back propagation
-start_year = 2008
-end_year = 2009
+start_year = 2004
+end_year = 2005
 
 for d in range(start_year,end_year):
     print("Process starting...")
@@ -138,9 +138,9 @@ for d in range(start_year,end_year):
     result = list((Counter(fields)-Counter(keep_fields)).elements())
     arcpy.DeleteField_management(kh_union,result)
     print("Dissolving dataset...")
-    arcpy.Dissolve_management(kh_union, 'kh_'+ str(d) + '.shp',["KODEPROV","KH"], "", "","")
+    arcpy.Dissolve_management(kh_union,'kh_'+ str(d) + '.shp',["KODEPROV","KH"], "", "","")
     print("Deleting union file...")
     arcpy.Delete_management(kh_union) 
-    print("Process complete...")
+    print("Process complete for KH year " + str(d))
 
 
