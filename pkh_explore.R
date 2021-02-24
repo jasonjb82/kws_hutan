@@ -18,13 +18,13 @@ wdir <- paste0(dropbox_dir,"\\KH\\Data\\Indonesia\\klhk\\PKH\\")
 
 # credentials -------------------------------------------------------------
 aws.signature::use_credentials()
-bucket <- "trase-indonesia"
+bucket <- "trase-storage"
 
 # read data ---------------------------------------------------------------
 # pelepasan
 pkh <- readOGR(paste0(wdir,"Pelepasan_Kawasan_Hutan.shp"))
 # boundaries
-obj <- get_object("6_BOUNDARIES/BIG/OUT/kabupaten_boundaries_2016_simplified.geojson", bucket)
+obj <- get_object("/indonesia/spatial/BOUNDARIES/big/out/kabupaten_boundaries_2016_simplified.geojson", bucket)
 kab <- read_sf(rawToChar(obj))
 
 # select kab location details to add
